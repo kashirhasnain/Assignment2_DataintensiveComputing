@@ -1,4 +1,4 @@
-# Assignment 1 – Text Processing Fundamentals using MapReduce
+# Assignment 2 - Text Processing and Classification using Apache Spark
 
 ## Project Overview
 
