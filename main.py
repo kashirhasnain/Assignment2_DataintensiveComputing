@@ -166,6 +166,91 @@ def part2(input_file: str, stopwords_file: str) -> None:
 
     df.unpersist()
     spark.stop()
+     # ── Part 3────────────────────────────────────────────────────────────────
+  
+spark = SparkSession.builder \
+    .appName("Task3") \
+    .getOrCreate()
+
+
+df = spark.read.csv(
+   "/Users/qaisarzada/task3/R_small.csv",
+    header=True,
+    inferSchema=True
+)
+
+
+df = df.withColumn(
+    "text",
+    lower(col("text"))
+)
+
+
+label_indexer = StringIndexer(
+    inputCol="label",
+    outputCol="labelIndex"
+)
+
+tokenizer = Tokenizer(
+    inputCol="text",
+    outputCol="tokens"
+)
+
+
+remover = StopWordsRemover(
+    inputCol="tokens",
+    outputCol="filtered"
+)
+
+
+cv = CountVectorizer(
+    inputCol="filtered",
+    outputCol="rawFeatures"
+)
+
+
+idf = IDF(
+    inputCol="rawFeatures",
+    outputCol="features"
+)
+
+
+selector = ChiSqSelector(
+    numTopFeatures=2000,
+    featuresCol="features",
+    outputCol="selectedFeatures",
+    labelCol="labelIndex"
+)
+
+
+pipeline = Pipeline(stages=[
+    label_indexer,
+    tokenizer,
+    remover,
+    cv,
+    idf,
+    selector
+])
+
+
+model = pipeline.fit(df)
+
+
+result = model.transform(df)
+
+
+result.select(
+    "label",
+    "selectedFeatures"
+).show(truncate=False)
+
+
+result.select(
+    "label",
+    "selectedFeatures"
+).write.mode("overwrite").json("output_ds")
+
+spark.stop()
 
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
