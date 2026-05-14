@@ -11,7 +11,7 @@ from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.ml import Pipeline
-from pyspark.ml.feature import (
+from pyspark.ml.feature import {
     CountVectorizer, IDF, StopWordsRemover, ChiSqSelector, StringIndexer, RegexTokenizer
 )
 
