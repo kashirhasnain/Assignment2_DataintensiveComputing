@@ -1,0 +1,3 @@
+Best params        : {'numTopFeatures': 2000, 'regParam': 0.01, 'standardization': True, 'maxIter': 100}
+Best validation F1 : 0.6190
+Test F1            : 0.6197
